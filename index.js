@@ -1,0 +1,93 @@
+var noofButtons = document.querySelectorAll(".drum").length;
+for  (var i=0; i< noofButtons ;i++){
+    document.querySelectorAll(".drum")[i].addEventListener("click",function(){
+        var buttonInnerHTML = this.innerHTML;
+          makeSound(buttonInnerHTML);
+          buttonAnimation(buttonInnerHTML);
+    });
+}
+      document.addEventListener("keypress",function(event){
+        makeSound(event.key);
+        buttonAnimation(event.key);
+    });
+
+       function makeSound(key){
+        switch (key) {
+            case'w':
+              var tom1 = new Audio('tom-1.mp3');
+              tom1.play();
+              break;
+            case'a':
+              var tom2 = new Audio('tom-2.mp3');
+              tom2.play();
+              break;
+            case's':
+              var tom3 = new Audio('tom-3.mp3');
+              tom3.play();
+              break;
+            case'd':
+              var tom4 = new Audio('tom-4.mp3');
+              tom4.play();
+              break;
+            case'j':
+              var crash = new Audio('crash.mp3');
+              crash.play();
+              break;
+            case'k':
+               var kick = new Audio('kick-bass.mp3');
+               kick.play();
+               break;
+            case'l':
+               var snare= new Audio('snare.mp3');
+               snare.play();
+              break;  
+
+            default: console.log(buttonInnerHTML);}};
+function buttonAnimation(currentKey){
+  var activeButton = document.querySelector("."+currentKey);
+  activeButton.classList.add("pressed");
+  setTimeout(function(){
+    activeButton.classList.remove("pressed");
+  },100);
+}
+
+var levels = ['wasdjkasaljas', 'asdjwkalladalsd', 'sdwajklswaddjlkals', 'dwaskladwasasdwkla']; // Add more levels as needed
+var currentLevel = 0;
+var currentStep = '';
+var score = 20;
+
+// Assuming you have elements with these IDs in your HTML
+var scoreElement = document.getElementById('score');
+var levelElement = document.getElementById('level');
+
+// Update the score and level display initially
+scoreElement.textContent = 'Score: ' + score;
+levelElement.textContent = 'Level: ' + (currentLevel + 1);
+
+document.addEventListener("keypress", function(event) {
+    checkStep(event.key);
+});
+var wrong = new Audio('wrong.mp3');
+function checkStep(key) {
+    currentStep += key;
+    if (currentStep === levels[currentLevel].substring(0, currentStep.length)) {
+        if (currentStep === levels[currentLevel]) {
+            currentLevel++;
+            levelElement.textContent = 'Level: ' + (currentLevel + 1); // Update level display
+            currentStep = '';
+        }
+    } else {
+        score--;
+        wrong.play();
+        scoreElement.textContent = 'Score: ' + score; // Update score display
+        currentStep = '';
+        if (score === 0) {
+            alert('Game over!');
+            // Game over, reset everything
+            currentLevel = 0;
+            levelElement.textContent = 'Level: ' + (currentLevel + 1); // Update level display
+            score = 20;
+            scoreElement.textContent = 'Score: ' + score; // Update score display
+        }
+    }
+}
